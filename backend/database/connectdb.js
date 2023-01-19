@@ -3,13 +3,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 try {
-  /*
-  const conn = await mongoose
-    .createConnection(process.env.URI_MONGO)
-    .asPromise();
-  conn.readyState;
-  console.log(conn.readyState);
-  */
+  await mongoose.set("strictQuery", false);
+  await mongoose.connect(process.env.URI_MONGO);
 } catch (error) {
   console.log("Error connecting to database: ", error);
 }
