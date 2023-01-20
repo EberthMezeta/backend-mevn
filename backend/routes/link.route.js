@@ -20,7 +20,13 @@ router.get("/:id", requiereToken, getLink);
 
 router.post("/", requiereToken, bodyLinkValidator, createLink);
 
-router.put("/:id", updateLink);
+router.put(
+  "/:id",
+  requiereToken,
+  paramValidator,
+  bodyLinkValidator,
+  updateLink
+);
 
 router.delete("/:id", requiereToken, paramValidator, deleteLink);
 

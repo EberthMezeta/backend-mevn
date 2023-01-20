@@ -47,7 +47,30 @@ export const getLink = async (req, res) => {
   }
 };
 
-export const updateLink = async (req, res) => {};
+export const updateLink = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { longLink } = req.body;
+
+    const link = await Link.findById(id);
+
+    if (!link) {
+      return res.status(404).json({ message: "Links not found" });
+    }
+
+    if (!link.userId.equals(req.userId)) {
+      return res.status(401).json({ message: "Link not c" });
+    }
+
+    link.longLink = longLink;
+
+    const responseLink = await link.save();
+
+    return res.json(responseLink);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const deleteLink = async (req, res) => {
   try {
