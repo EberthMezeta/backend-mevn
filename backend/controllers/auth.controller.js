@@ -7,7 +7,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Use exists" });
+      return res.status(400).json({ message: "User No exists" });
     }
 
     const responsePassword = await user.comparePassword(password);
@@ -42,7 +42,11 @@ export const register = async (req, res) => {
     user = new User({ email, password });
 
     await user.save();
-    return res.json(user);
+
+    const { token, expiresIn } = generateToken(user._id);
+    generateRefreshToken(user._id, res);
+
+    return res.json({ token, expiresIn });
   } catch (error) {
     if (error.code === 11000) {
       return res.status(400).json({ message: "Email already exists" });
@@ -61,7 +65,8 @@ export const test = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const { token, expiresIn } = generateToken(req.Id);
+    console.log(req.userId);
+    const { token, expiresIn } = generateToken(req.userId);
 
     return res.json({ token, expiresIn });
   } catch (error) {

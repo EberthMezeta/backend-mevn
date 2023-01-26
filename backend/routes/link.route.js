@@ -16,7 +16,7 @@ const router = Router();
 
 router.get("/", requiereToken, getLinks);
 
-router.get("/:id", requiereToken, getLink);
+router.get("/:shortLink", getLink);
 
 router.post("/", requiereToken, bodyLinkValidator, createLink);
 

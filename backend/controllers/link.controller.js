@@ -29,6 +29,23 @@ export const getLinks = async (req, res) => {
 
 export const getLink = async (req, res) => {
   try {
+    const { shortLink } = req.params;
+    const link = await Link.findOne({ shortLink });
+
+    if (!link) return res.status(404).json({ error: "No existe el link" });
+
+    return res.json({ longLink: link.longLink });
+  } catch (error) {
+    console.log(error);
+    if (error.kind === "ObjectId") {
+      return res.status(403).json({ error: "Formato id incorrecto" });
+    }
+    return res.status(500).json({ error: "error de servidor" });
+  }
+};
+
+export const getLinkPriv = async (req, res) => {
+  try {
     const { id } = req.params;
 
     const link = await Link.findById(id);
